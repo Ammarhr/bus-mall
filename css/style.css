@@ -1,0 +1,42 @@
+body {
+    background-color: rgb(235, 255, 248);
+}
+
+header {
+    background-color: lightslategray;
+}
+
+header h1 {
+    font-family: cursive;
+    padding-left: 10px;
+}
+
+header h6 {
+    padding-left: 10px;
+}
+
+nav ul li {
+    display: inline-block;
+    padding: 10px;
+}
+
+nav {
+    background-color: lightslategray;
+}
+
+#firstProduct,
+#secondProduct,
+#thirdProduct {
+    float: left;
+    width: 350px;
+    height: 350px;
+    padding: 30px;
+    border: solid lightslategray;
+    margin: 10px;
+}
+
+#theResult li {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: large;
+    clear: both;
+}
