@@ -41,29 +41,7 @@ for (var i = 0; i < products.length; i++) {
 }
 
 
-
-function randomPick(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-subProduct = [];
-
-// try #14!!!!!!!!!
-// function seekNames(names) {
-//     return names = [firstProduct.name, secondProduct.name, thirdProduct.name];
-// }
-// seekNames();
-// if (Product.Seek.every(seekNames) == true) {
-//     if (Product.Seek.every(seekNames) == true) {
-//         if (Product.Seek.every(seekNames) == true) {
-
-//         }
-//         renderOut();
-//     }
-// }
-// try #17
-// firstProduct.name) || subProduct.includes(secondProduct.name) || subProduct.includes(thirdProduct.name) ||
-
+var subProduct = []; //new array for comparing images
 var firstProduct, secondProduct, thirdProduct;
 
 function renderOut() {
@@ -72,92 +50,49 @@ function renderOut() {
     secondProduct = Product.all[randomPick(0, Product.all.length - 1)];
     thirdProduct = Product.all[randomPick(0, Product.all.length - 1)];
 
-    while (firstProduct.name === secondProduct.name || secondProduct.name === thirdProduct.name || thirdProduct.name === firstProduct.name) {
-        renderOut();
-    }
+    // if statement condetion:
+    // if (firstProduct === secondProduct || secondProduct === thirdProduct || thirdProduct === firstProduct) {
+    //     renderOut();
 
+    while (subProduct.includes(firstProduct) || subProduct.includes(secondProduct) || subProduct.includes(thirdProduct) || firstProduct.name === secondProduct.name || thirdProduct.name === secondProduct.name || firstProduct.name === thirdProduct.name) {
+
+        firstProduct = Product.all[randomPick(0, Product.all.length - 1)];
+        secondProduct = Product.all[randomPick(0, Product.all.length - 1)];
+        thirdProduct = Product.all[randomPick(0, Product.all.length - 1)];
+
+    }
+    // return array  to empty :
+    subProduct = [];
+    // console.log('element of', subProduct);
+    // then push the new images:
+    subProduct.push(firstProduct);
+    subProduct.push(secondProduct);
+    subProduct.push(thirdProduct);
+    // console.log(subProduct)
 
     product1.setAttribute('src', firstProduct.imgPath);
     product1.setAttribute('alt', firstProduct.name);
     product1.setAttribute('title', firstProduct.name);
     // console.log(firstProduct.name);
-
     product2.setAttribute('src', secondProduct.imgPath);
     product2.setAttribute('alt', secondProduct.name);
     product2.setAttribute('title', secondProduct.name);
-
+    // console.log(secondProduct.name);
     product3.setAttribute('src', thirdProduct.imgPath);
     product3.setAttribute('alt', thirdProduct.name);
     product3.setAttribute('title', thirdProduct.nam);
-
-
-    // try #21
-    // subProduct.push(firstProduct.name);
-    // subProduct.push(secondProduct.name);
-    // subProduct.push(thirdProduct.name);
-
+    // console.log(thirdProduct.name);
 }
 renderOut();
 
-function resultVotes() {
-    var ul1 = document.getElementById('theResult');
-    for (var i = 0; i < Product.all.length; i++) {
-        // deleting the extintion from the name using replacs()
-        var newStr = Product.all[i].name.replace('.jpg', '');
-        var li1 = document.createElement('li');
-        li1.textContent = ` ${newStr} has ${Product.all[i].click} votes and ${Product.all[i].views} views`
-        ul1.appendChild(li1);
-    }
+// set item in local storage:
+function localStorData() {
+    var userData = JSON.stringify(Product.all);
+    localStorage.setItem('newData', userData);
 }
 
-
-function renderChart() {
-    var ckicksNumber = [];
-    for (var i = 0; i < products.length; i++) {
-        ckicksNumber.push(Product.all[i].click);
-    }
-
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var newCart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: products,
-            datasets: [{
-                label: '# of Votes',
-                data: ckicksNumber,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-}
-
+// add click event:
 mainContainer.addEventListener('click', oneClickDone);
-
 var numOfClick = 0;
 
 function oneClickDone(e) {
@@ -175,8 +110,8 @@ function oneClickDone(e) {
             firstProduct.views++;
             secondProduct.views++;
             thirdProduct.views++;
+            localStorData()
             renderOut();
-
         }
 
     } else {
@@ -184,11 +119,125 @@ function oneClickDone(e) {
         resultVotes();
         renderChart();
         alert("your chocise finished")
-
     }
 }
 
-// function seekInNames() {
+// list of results:
+function resultVotes() {
+    var ul1 = document.getElementById('theResult');
+    for (var i = 0; i < Product.all.length; i++) {
+        // deleting the extintion from the name using replacs()
+        var newStr = Product.all[i].name.replace('.jpg', '');
+        var li1 = document.createElement('li');
+        li1.textContent = ` ${newStr} has ${Product.all[i].click} votes and ${Product.all[i].views} views`
+        ul1.appendChild(li1);
+    }
+}
 
-// }
-// seekInNames()
+// pick a random number:
+function randomPick(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+// create chart:
+function renderChart() {
+    var viewsNumber = [];
+    for (var i = 0; i < products.length; i++) {
+        viewsNumber.push(Product.all[i].views);
+    }
+
+    var ckicksNumber = [];
+    for (var i = 0; i < products.length; i++) {
+        ckicksNumber.push(Product.all[i].click);
+    }
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var newCart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: products,
+            datasets: [{
+                    label: '# of Votes',
+                    data: ckicksNumber,
+                    viewsNumber,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(241, 137, 0, 0.801)',
+                        'rgba(96, 241, 0, 0.801)',
+                        'rgba(241, 0, 221, 0.801)',
+                        'rgba(0, 24, 241, 0.801)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(241, 137, 0, 0.801)',
+                        'rgba(96, 241, 0, 0.801)',
+                        'rgba(241, 0, 221, 0.801)',
+                        'rgba(0, 24, 241, 0.801)',
+                        'rgba(251, 255, 21, 0.932)'
+
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    label: '# of Views',
+                    data: viewsNumber,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+}
+
+
+
+function restoreData() {
+    var userData = localStorage.getItem('newData');
+    if (userData) {
+        Product.all = JSON.parse(userData);
+        resultVotes();
+        renderChart();
+    }
+
+}
+restoreData();
