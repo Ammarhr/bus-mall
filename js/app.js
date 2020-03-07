@@ -1,5 +1,11 @@
 var products = [
-    'bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'usb.gif', 'water-can.jpg', 'wine-glass.jpg'
+    'bag.jpg', 'banana.jpg', 'bathroom.jpg',
+    'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg',
+    'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg',
+    'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg',
+    'scissors.jpg', 'shark.jpg', 'sweep.png',
+    'tauntaun.jpg', 'unicorn.jpg',
+    'usb.gif', 'water-can.jpg', 'wine-glass.jpg'
 ];
 
 // get access to the elements inside html file
@@ -24,7 +30,7 @@ product3.setAttribute('alt', products[2]);
 product3.setAttribute('title', products[2]);
 
 
-// the constructor
+// the constructor of products
 function Product(name) {
     this.name = name;
     this.imgPath = `img/${this.name}`
@@ -44,13 +50,15 @@ for (var i = 0; i < products.length; i++) {
 var subProduct = []; //new array for comparing images
 var firstProduct, secondProduct, thirdProduct;
 
+//rener the random image function:
 function renderOut() {
 
     firstProduct = Product.all[randomPick(0, Product.all.length - 1)];
     secondProduct = Product.all[randomPick(0, Product.all.length - 1)];
     thirdProduct = Product.all[randomPick(0, Product.all.length - 1)];
 
-    // if statement condetion:
+
+    //  to avoid repeate the images we can use if statement condetion too:
     // if (firstProduct === secondProduct || secondProduct === thirdProduct || thirdProduct === firstProduct) {
     //     renderOut();
 
@@ -91,7 +99,7 @@ function localStorData() {
     localStorage.setItem('newData', userData);
 }
 
-// add click event:
+// add click event to change  the random images:
 mainContainer.addEventListener('click', oneClickDone);
 var numOfClick = 0;
 
@@ -122,7 +130,7 @@ function oneClickDone(e) {
     }
 }
 
-// list of results:
+// list of results of clicks and views for each product:
 function resultVotes() {
     var ul1 = document.getElementById('theResult');
     for (var i = 0; i < Product.all.length; i++) {
@@ -134,13 +142,13 @@ function resultVotes() {
     }
 }
 
-// pick a random number:
+// helper function to pick a random number:
 function randomPick(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 
-// create chart:
+// create chart for the result:
 function renderChart() {
     var viewsNumber = [];
     for (var i = 0; i < products.length; i++) {
@@ -244,7 +252,7 @@ function renderChart() {
 }
 
 
-
+// to keep the data renderd after refresh the page:
 function restoreData() {
     var userData = localStorage.getItem('newData');
     if (userData) {
